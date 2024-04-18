@@ -1,32 +1,35 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+import { BrowserRouter } from "react-router-dom";
+import { ChakraProvider } from '@chakra-ui/react'
+import { Provider } from 'react-redux';
+import { Store } from './Redux/store';
+import { AdminAuthContext } from './context/AdminAuthContext';
+import { AuthContext } from './context/AuthContext';
+// import { store } from './Redux/store';
+document.title="Pet-Connect"
 
-// Correct the file name in the require statement
-const petRoutes = require("./routes/petRoutes");
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <ChakraProvider>
+    <BrowserRouter>
+    <AuthContext>
+    <AdminAuthContext>
+      <Provider store={Store}>
+        <App />
+      </Provider>
+    </AdminAuthContext>
+    </AuthContext>
+    </BrowserRouter>
+</ChakraProvider>
+);
+  
 
-const app = express();
 
-// Correct the function call for the cors middleware
-app.use(cors());
-
-app.use(express.json());
-
-// Ensure you have a file for categoryRoutes or correct this if it's a typo
-// app.use("/api/category", categoryRoutes);
-
-const mongoUrl = 'mongodb://localhost:27017/WoofDatabase';
-
-mongoose.connect(mongoUrl, { useNewUrlParser: true });
-
-mongoose.connection.on('connected', () => {
-    console.log('Connected to MongoDB...');
-});
-
-mongoose.connection.on('error', (err) => {
-    console.log("Error connecting to MongoDB:", err);
-});
-
-app.listen(4000, () => {
-    console.log("App is running on PORT 4000");
-});
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
